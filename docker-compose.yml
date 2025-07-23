@@ -1,0 +1,35 @@
+services:
+  backup_amd64:
+    &common
+    image: backup_test:amd64
+    container_name: backup_runner_amd64
+    platform: linux/amd64
+    environment:
+      TZ: Europe/Athens
+      #backup environment variables
+      BACKUP_CRON: ${backup_cron}
+      MEGA_REMOTE_FOLDER: ${mega_remote_folder} 
+      #archive environment variables
+      ENABLE_ARCHIVE_FUNCTION: true # true or false .Default is false
+      ARCHIVE_CRON: ${archive_cron}
+      MEGA_BACKUP_ARCHIVE_FOLDER: ${archive_folder_name}
+      #mega environment variables
+      MEGA_EMAIL: ${mega_mail}
+      MEGA_PASSWORD: ${mega_password}
+      ENCRYPTION_PASSWORD: ${encryption_password}
+      #discord webhooks environment variables. Optional
+      DISCORD_ERROR_WEBHOOK_URL: ${discord_error_webhook_url} 
+      DISCORD_ARCHIVE_WEBHOOK_URL: ${discord_archive_webhook_url} 
+      DISCORD_WEBHOOK_URL: ${discord_webhook_url} 
+    volumes:
+      - /home/dibal/Documents/Discord_bot:/backup/backup_in/Discord_bot
+      - ./backup/backup_out:/backup/backup_out  
+    restart: "no"
+    entrypoint: "./scripts/start-cron.sh"
+
+  backup_arm64:
+    <<: *common
+    image: backup_test:arm64
+    container_name: backup_runner_arm64
+    platform: linux/arm64
+    profiles: ["arm64"]
