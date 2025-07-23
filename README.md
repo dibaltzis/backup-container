@@ -155,7 +155,3 @@ backup-container/
 
 ---
 
-## License
-
-MIT (or your preferred license)
-
