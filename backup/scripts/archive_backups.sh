@@ -366,7 +366,7 @@ summary+="📅 Date archived: $ARCHIVE_DAY/$ARCHIVE_MONTH/$ARCHIVE_YEAR\n"
 summary+="📦 Files archived: ${#archive_files[@]}\n"
 summary+="📈 Used space: $used_percent\n"
 summary+="━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-send_discord_notification "$summary" "$DISCORD_ARCHIVE_WEBHOOK_URL" "success"
+send_discord_notification "$summary" "$DISCORD_ARCHIVE_WEBHOOK_URL" "archive"
 
 mega-logout >/dev/null 2>&1
 complete_message 
