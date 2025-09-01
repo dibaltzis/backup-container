@@ -9,8 +9,7 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 # Check if Discord webhook URLs are set; if not, disable notifications
 if [[ -z "$DISCORD_ARCHIVE_WEBHOOK_URL" || -z "$DISCORD_ERROR_WEBHOOK_URL" ]]; then
     echo "⚠️  Discord webhook URLs not set — disabling Discord notifications."
-    send_notification_to_discord() { :; }
-    send_error_notification_to_discord() { :; }
+    send_discord_notification() { :; }
 fi
 
 # Function: create_folder_for_the_monthly_backup_archive
@@ -91,7 +90,9 @@ get_the_file_names_for_the_given_date() {
     # Array mapping numeric months to their full month names
     local month_names=("Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec")
     # Convert the numeric month (e.g., 05) to the full month name (e.g., May)
-    local month_name="${month_names[$((specific_month - 1))]}"
+    #local month_name="${month_names[$((specific_month - 1))]}"
+    local month_index=$((10#$specific_month - 1))
+    local month_name="${month_names[$month_index]}"
     
     # Check if the month name was correctly retrieved
     if [ -z "$month_name" ]; then
@@ -346,7 +347,7 @@ for file in "${archive_files[@]}"; do
     fi
 
     # Deletes file versions inside the archive folder ($MEGA_ARCHIVE_PATH)
-    archived_file_path="/$MEGA_ARCHIVE_PATH/$clean_file"
+    archived_file_path="$MEGA_ARCHIVE_PATH/$clean_file"
     if ! mega-deleteversions -f "$archived_file_path"; then
         send_discord_notification "Error: Failed to delete versions of [$archived_file_path]." "$DISCORD_ERROR_WEBHOOK_URL" "error"
         mega-logout >/dev/null 2>&1
@@ -356,6 +357,7 @@ for file in "${archive_files[@]}"; do
     fi
 done
 
+read used_percent total_cloud_size <<< "$(get_remaining_space)"
 summary="━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
 summary+="✅ Archiving proccess completed\n"
 summary+="🕓 $(date '+%Y-%m-%d %H:%M:%S') \n"
@@ -369,6 +371,5 @@ summary+="━━━━━━━━━━━━━━━━━━━━━━━�
 send_discord_notification "$summary" "$DISCORD_ARCHIVE_WEBHOOK_URL" "archive"
 
 mega-logout >/dev/null 2>&1
-complete_message 
 msg="[ ✓ ] Archive completed successfully at $(date '+%Y-%m-%d %H:%M:%S')"
 print_boxed_message "$msg"
