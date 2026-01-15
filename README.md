@@ -29,6 +29,7 @@ backup-container/
 │       ├── archive_backups.sh   # Archive logic for old versions
 │       └── start-cron.sh     # Entrypoint: sets up cron jobs
 ├── Dockerfile
+├── Jenkinsfile
 ├── docker-compose.yml
 ├── docker-compose.build.yml
 └── README.md
@@ -40,7 +41,7 @@ backup-container/
 
 1. **Clone the repository and enter the directory:**
    ```sh
-   git clone <your-repo-url>
+   git clone https://github.com/dibaltzis/backup-container.git
    cd backup-container
    ```
 
