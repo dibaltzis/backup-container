@@ -129,6 +129,7 @@ backup-container/
 
 ---
 
+
 ## Logs
 
 - All logs are written to `backup/backup_out/backup_logs.txt` and `archive_logs.txt`.
@@ -147,6 +148,17 @@ backup-container/
 
 ---
 
+## CI/CD Pipeline
+
+This project implements a fully automated CI/CD pipeline using Jenkins:
+
+- **Trigger**: A Gitea webhook triggers the Jenkins pipeline on each commit
+- **Build**: Multi-architecture Docker images are built using Docker Buildx (amd64 and arm64)
+- **Registry**: Versioned images are pushed to a private local Docker registry
+- **Deployment**: Watchtower monitors the registry and automatically deploys the latest image, completing the CI/CD cycle
+
+---
+
 ## Troubleshooting
 
 - Check logs in `backup/backup_out/`.
@@ -154,4 +166,5 @@ backup-container/
 - Ensure your MEGA credentials and folder names are correct.
 
 ---
+
 
