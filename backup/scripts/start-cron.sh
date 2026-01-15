@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Running backup_container version ${APP_VERSION}"
+
 ./scripts/checks.sh
 if [ $? -ne 0 ]; then
     echo "❌ Pre-flight checks failed. Exiting."

@@ -9,6 +9,11 @@ RUN go install github.com/HACKERALERT/Picocrypt/cli/v1/picocrypt@latest
 # --- Final Runtime Stage ---
 FROM debian:bookworm-slim AS runtime
 
+# Build version argument and label
+ARG VERSION
+LABEL build.version="${VERSION}"
+ENV APP_VERSION="${VERSION}"
+
 # Install minimal runtime dependencies including MegaCMD dependency (procps)
 RUN apt-get update && apt-get install -y \
     libfuse2 \
